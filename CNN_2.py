@@ -13,35 +13,53 @@ from keras.layers import Dense
 
 
 #paths to find train and test data
-train_zero_dir = '/home/kris/Загрузки/2/'
+train_1_dir = '/home/kris/Рабочий стол/white/1/'
+train_5_dir = '/home/kris/Рабочий стол/white/5/'
+train_7_dir = '/home/kris/Рабочий стол/white/7/'
 
-test_black_dir = '/home/kris/Загрузки/3/'
+
+test_black_dir = '/home/kris/Рабочий стол/white/are/'
+test_no_dir = '/home/kris/Рабочий стол/white/not/'
 
 #get data set count
-train_zero_sample = len(os.listdir(train_zero_dir))
+train_1_sample = len(os.listdir(train_1_dir))
+train_5_sample = len(os.listdir(train_5_dir))
+train_7_sample = len(os.listdir(train_7_dir))
 
 test_black_sample = len(os.listdir(test_black_dir))
+test_no_sample = len(os.listdir(test_no_dir))
+
+
+print("Train Set samples- 1-"+str(train_1_sample)+" 2-"+str(train_5_sample)+" 3-"+str(train_7_sample))
 
 
 
-print("Train Set samples- Zero-"+str(train_zero_sample))
+print("Test Set samples- HAND-"+str(test_black_sample)+" NON_HAND-"+str(test_no_sample))
 
-
-
-print("Test Set samples- Black-"+str(test_black_sample))
-
-train_x_data_set=np.zeros([train_zero_sample,100,100,3])
+train_x_data_set=np.zeros([train_1_sample+train_5_sample+train_7_sample,100,100,3])
 print("shape of training data set: "+ str(train_x_data_set.shape))
 
 
 
+
 #load images containing hand in train_x_data_set matrix
-for index,filename in enumerate(os.listdir(train_zero_dir)):
-    img = Image.open(train_zero_dir+filename)
+for index,filename in enumerate(os.listdir(train_1_dir)):
+    img = Image.open(train_1_dir+filename)
     img = img.resize((100,100),Image.ANTIALIAS)
     im = np.array(img)
     train_x_data_set[index, :, :, :] = im
 
+for index,filename in enumerate(os.listdir(train_5_dir)):
+    img = Image.open(train_5_dir+filename)
+    img = img.resize((100,100),Image.ANTIALIAS)
+    im = np.array(img)
+    train_x_data_set[index, :, :, :] = im
+
+for index,filename in enumerate(os.listdir(train_7_dir)):
+    img = Image.open(train_7_dir+filename)
+    img = img.resize((100,100),Image.ANTIALIAS)
+    im = np.array(img)
+    train_x_data_set[index, :, :, :] = im
 
 
 
@@ -51,9 +69,10 @@ print(train_x_data_set)
 
 train_y_data_set=np.array([])
 
-train_y_data_set=np.append(train_y_data_set,[1]*train_zero_sample)
+train_y_data_set=np.append(np.append(np.append(train_y_data_set,[0.9]*train_1_sample),[0.6]*train_5_sample),[0.1]*train_7_sample)
 print("shape of train label:"+str(train_y_data_set.shape))
 print(train_y_data_set)
+
 
 
 model = Sequential()
@@ -65,6 +84,7 @@ model.add(Conv2D(16, (3, 3), activation='relu'))
 model.add(MaxPooling2D(pool_size=(2,2)))
 model.add(Flatten())
 model.add(Dense(units=128, activation='relu'))
+#model.add(Dense(units=1, activation='sigmoid'))
 model.add(Dense(units=1, activation='sigmoid'))
 
 
@@ -72,8 +92,7 @@ model.compile(optimizer='adam',loss='binary_crossentropy',metrics=['accuracy'])
 
 model.fit(train_x_data_set, train_y_data_set,epochs=50)
 
-
-test_x_data_set=np.zeros([test_black_sample,100,100,3])
+test_x_data_set=np.zeros([test_black_sample+test_no_sample,100,100,3])
 test_file_list = []
 
 
