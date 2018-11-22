@@ -62,6 +62,7 @@ model.add(MaxPooling2D(pool_size=(2,2)))
 model.add(Flatten())
 model.add(Dense(units=128,activation='relu'))
 model.add(Dense(units=1,activation='sigmoid'))
+model.add(Dropout(0.2))
 
 model.compile(optimizer='adam',loss='binary_crossentropy',metrics=['accuracy'])
 model.fit(train_x_data_set,train_y_data_set,epochs=10)
@@ -118,18 +119,3 @@ for filename,predict in zip(test_file_list,time_predictions):
 
 model.save('/home/kris/BarcodesNeural/B_detect_24_feb.model')
 
-
-
-model.evaluate(test_x_data_set,test_y_data_set)
-import timeit
-
-
-time_predictions=model.predict(test_x_data_set)
-print(time_predictions)
-print(model.evaluate(test_x_data_set,test_y_data_set))
-for filename,predict in zip(test_file_list,time_predictions):
-    print(filename+"-->"+str(predict))
-    if(predict>=0.5000):
-        print('There is code')
-    else:
-        print("No code")
