@@ -31,7 +31,7 @@ model.add(Flatten())
 model.add(Dense(units=128,activation='relu'))
 model.add(Dense(units=1,activation='sigmoid'))
 
-model.add(Dropout(0.5))
+model.add(Dropout(0.1))
 
 model.compile(optimizer='adam',loss='binary_crossentropy',metrics=['accuracy'])
 
