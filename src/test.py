@@ -6,16 +6,15 @@ from keras.models import load_model
 img_width, img_height = 100, 100
 batch_size=10
 test_dir = '/home/kris/Рабочий стол/Dataset/Train/test/'
-nb_test_samples = 200
+nb_test_samples = 50
+
 model=load_model('/home/kris/BarcodesNeural/detect.model')
-test_datagen =ImageDataGenerator(rescale=1./255, shear_range=0.2,rotation_range=90,
-    zoom_range=0.2,
-horizontal_flip=True, vertical_flip=True)
+test_datagen =ImageDataGenerator(rescale=1./255)
 
 test_generator=test_datagen.flow_from_directory(
         test_dir,
         target_size=(img_width, img_height),
-        batch_size=10,
+        batch_size=1,
         class_mode='binary')
 
 
