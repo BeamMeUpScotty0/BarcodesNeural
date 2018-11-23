@@ -1,7 +1,7 @@
 # BarcodesNeural
 
 Barcodes recognition using neural networks.
-The folder "Barcodes" contains code for detection barcodes and digit recognition/
+Folder "Barcodes" contains code for detection barcodes with opencv and digit recognition.
 
 Requirements:
 
