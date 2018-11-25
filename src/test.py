@@ -1,30 +1,53 @@
-
-from keras.preprocessing.image import ImageDataGenerator
+import os
+import numpy as np
+from PIL import Image
 from keras.models import load_model
-
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 img_width, img_height = 100, 100
-batch_size=10
-test_dir = '/home/kris/Рабочий стол/Dataset/Train/test/'
-nb_test_samples = 50
+batch_size = 10
+x_test_dir = '/home/kris/Рабочий стол/Dataset/Train/test/no/'
+y_test_dir = '/home/kris/Рабочий стол/Dataset/Train/test/yes/'
 
-model=load_model('/home/kris/BarcodesNeural/detect.model')
-test_datagen =ImageDataGenerator(rescale=1./255)
-
-test_generator=test_datagen.flow_from_directory(
-        test_dir,
-        target_size=(img_width, img_height),
-        batch_size=1,
-        class_mode='binary')
+x_test_sample = len(os.listdir(x_test_dir))
+y_test_sample = len(os.listdir(y_test_dir))
 
 
-print("model evaluate")
+x_test = np.zeros([x_test_sample + y_test_sample, 100, 100, 3])
 
-scores=model.evaluate_generator(test_generator, nb_test_samples//10)
-print(scores)
-print('Test score:', scores[0])
-print("test accuracy: %.2f%%"%(scores[1]*100))
-#a=model.predict_generator(test_generator, nb_test_samples)
-#print("Prediction: ", a)
+test_file_list = []
+
+for index,filename in enumerate(os.listdir(x_test_dir)):
+    img = Image.open(x_test_dir + filename)
+    test_file_list.append(filename)
+    img = img.resize((100, 100), Image.ANTIALIAS)
+    im = np.array(img)
+    x_test[index, :, :, :] = im
+
+
+for index,filename in enumerate(os.listdir(x_test_dir)):
+    img = Image.open(x_test_dir + filename)
+    test_file_list.append(filename)
+    img = img.resize((100, 100), Image.ANTIALIAS)
+    im = np.array(img)
+    x_test[index, :, :, :] = im
+
+x_test = x_test/255
+
+y_test = np.array([])
+y_test = np.append(np.append(y_test, [1]*x_test_sample), [0]*y_test_sample)
+
+
+model = load_model('/home/kris/BarcodesNeural/detect.model')
+
+
+print("Model evaluate...")
+score = model.evaluate(x_test, y_test)
+
+print('Test loss:', score[0])
+print("test accuracy: %.2f%%"%(score[1]*100))
+# a=model.predict(x_test)
+# print("Prediction: ", a)
 
 
