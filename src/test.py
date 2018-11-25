@@ -44,9 +44,9 @@ model = load_model('/home/kris/BarcodesNeural/detect.model')
 
 print("Model evaluate...")
 score = model.evaluate(x_test, y_test)
-
+print(score)
 print('Test loss:', score[0])
-print("test accuracy: %.2f%%"%(score[1]*100))
+print("Test accuracy: %.2f%%"%(score[1]*100))
 # a=model.predict(x_test)
 # print("Prediction: ", a)
 
