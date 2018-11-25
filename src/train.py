@@ -16,7 +16,7 @@ val_dir = '/home/kris/Рабочий стол/Dataset/Train/val/'
 nb_train_samples = 1000
 nb_val_samples = 300
 
-epochs = 5
+epochs = 1
 
 
 
@@ -29,7 +29,7 @@ model.add(Conv2D(16, (3, 3), activation='relu'))
 model.add(MaxPooling2D(pool_size=(2, 2)))
 model.add(Flatten())
 model.add(Dense(units=512, activation='relu'))
-model.add(Dropout(0.7))
+model.add(Dropout(0.5))
 model.add(Dense(units=1, activation='sigmoid'))
 
 # model.summary()
@@ -39,8 +39,8 @@ model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']
 
 
 datagen = ImageDataGenerator(rescale=1./255,
-                             # rotation_range=20,
-                             # width_shift_range=0.2,
+                             rotation_range=20,
+                             width_shift_range=0.2,
                              # height_shift_range=0.2,
                              horizontal_flip=True)
 
