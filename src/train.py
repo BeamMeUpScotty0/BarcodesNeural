@@ -14,9 +14,9 @@ train_dir = '/home/kris/Рабочий стол/Dataset/Train/train/'
 val_dir = '/home/kris/Рабочий стол/Dataset/Train/val/'
 
 nb_train_samples = 1000
-nb_val_samples = 300
+nb_val_samples = 700
 
-epochs = 1
+epochs = 2
 
 
 
@@ -29,19 +29,19 @@ model.add(Conv2D(16, (3, 3), activation='relu'))
 model.add(MaxPooling2D(pool_size=(2, 2)))
 model.add(Flatten())
 model.add(Dense(units=512, activation='relu'))
-model.add(Dropout(0.5))
+model.add(Dropout(0.7))
 model.add(Dense(units=1, activation='sigmoid'))
 
-# model.summary()
-# input('Wait...')
+
+
 
 model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
 
 datagen = ImageDataGenerator(rescale=1./255,
-                             rotation_range=20,
+                             rotation_range=90,
                              width_shift_range=0.2,
-                             # height_shift_range=0.2,
+                             height_shift_range=0.2,
                              horizontal_flip=True)
 
 train_generator = datagen.flow_from_directory(train_dir,
